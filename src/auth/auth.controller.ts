@@ -84,4 +84,16 @@ export class AuthController {
 
   }
 
+  @UseGuards(AuthGuard)
+  @Put('password')
+  async changePassword(
+    @Body('currentPassword') currentPassword,
+    @Body('newPassword') newPassword,
+    @User('id') id
+  ) {
+
+    return this.userService.changePassword(id, currentPassword, newPassword);
+
+  }
+
 }
