@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { Prisma } from '@prisma/client';
 import { MailService } from 'src/mail/mail.service';
 import { join } from 'path';
-import { existsSync, renameSync, unlinkSync } from 'fs';
+import { createReadStream, existsSync, renameSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class UserService {
@@ -309,6 +309,23 @@ export class UserService {
       photo,
     });
 
+  }
+
+  async getPhoto(id: number) {
+
+    const { photo } = await this.get(id);
+
+    let filePath = this.getPhotoStoragePath('../blank-profile.jpg');
+
+    if (photo) {
+      filePath = this.getPhotoStoragePath(photo);
+    }
+
+    const file = createReadStream(filePath);
+    const extension = filePath.split('.').pop();
+    
+    return { file, extension };
+    
   }
 
 }
