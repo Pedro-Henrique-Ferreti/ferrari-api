@@ -6,6 +6,12 @@ export class ContactService {
 
   constructor(private prisma: PrismaService) {}
 
+  async list() {
+
+    return await this.prisma.contact.findMany();
+
+  }
+
   async create(
     { name, email, message }:
     { name: string, email: string; message: string }
@@ -29,11 +35,22 @@ export class ContactService {
       personId = Number(user.personId);
     } else {
 
-      const person = await this.prisma.person.create({
-        data: { name },
+      const contact = await this.prisma.contact.findFirst({
+        where: {
+          email,
+        },
       });
 
-      personId = Number(person.id);
+      if (contact) {
+        personId = Number(contact.personId);
+      } else {
+        
+        const newPerson = await this.prisma.person.create({
+          data: { name },
+        });
+
+        personId = Number(newPerson.id);
+      }
     }
     
     return this.prisma.contact.create({
