@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/mail/mail.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PasswordService } from 'src/user/password.service';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class AuthService {
     private jwtService: JwtService,
     private prisma: PrismaService,  
     private mailService: MailService,
+    private passwordService: PasswordService,
   ) {}
 
   async getToken(userId: number) {
@@ -27,7 +29,7 @@ export class AuthService {
 
     const user = await this.userService.getByEmail(email);
 
-    await this.userService.checkPassword(user.id, password);
+    await this.passwordService.checkPassword(user.id, password);
 
     const token = await this.getToken(user.id);
 
@@ -117,7 +119,7 @@ export class AuthService {
       }
     });
 
-    return this.userService.updatePassword(passwordRecovery.userId, password);
+    return this.passwordService.updatePassword(passwordRecovery.userId, password);
 
   }
 
