@@ -1,0 +1,79 @@
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateServiceDto } from './dto/create-service.dto';
+import { UpdateServiceDto } from './dto/update-service.dto';
+
+@Injectable()
+export class ServiceService {
+
+  constructor (private prisma: PrismaService) {}
+
+  isValidId(id: number) {
+    id = Number(id);
+
+    if (isNaN(id)) {
+      throw new BadRequestException('Id is invalid');
+    }
+
+    return id;
+  }
+
+  isValidData(data: CreateServiceDto | UpdateServiceDto) {
+    if (!data.name) {
+      throw new BadRequestException('Name is required');
+    }
+    if (!data.description) {
+      throw new BadRequestException('Description is required');
+    }
+    if (!data.price) {
+      throw new BadRequestException('Price is required');
+    }
+
+    return data as CreateServiceDto;
+  }
+
+  async create(data: CreateServiceDto) {
+    return this.prisma.service.create({
+      data: this.isValidData(data),
+    });
+  }
+
+  findAll() {
+    return this.prisma.service.findMany();
+  }
+
+  findOne(id: number) {
+    return this.prisma.service.findUnique({
+      where: {
+        id: this.isValidId(id),
+      },
+    });
+  }
+
+  async update(id: number, data: UpdateServiceDto) {
+
+    if (!await this.findOne(id)) {
+      throw new BadRequestException('Id not found');
+    }
+
+    return this.prisma.service.update({
+      where: {
+        id: this.isValidId(id),
+      },
+      data: this.isValidData(data),
+    });
+  }
+
+  async remove(id: number) {
+
+    if (!await this.findOne(id)) {
+      throw new BadRequestException('Id not found');
+    }
+
+    return this.prisma.service.delete({
+      where: {
+        id: this.isValidId(id),
+      },
+    });
+  }
+}
