@@ -12,6 +12,20 @@ export class ContactService {
 
   }
 
+  async get (id: number) {
+
+    id = Number(id);
+
+    if (isNaN(id)) {
+      throw new BadRequestException('Id is invalid');
+    }
+
+    return this.prisma.contact.findUnique({
+      where: { id },
+    });
+
+  }
+
   async create(
     { name, email, message }:
     { name: string, email: string; message: string }
@@ -59,6 +73,26 @@ export class ContactService {
         email,
         message,
       },
+    });
+
+  }
+
+  async delete(id: number) {
+
+    id = Number(id);
+
+    if (isNaN(id)) {
+      throw new BadRequestException('Id is invalid');
+    }
+
+    const contact = await this.get(id);
+
+    if (!contact) {
+      throw new BadRequestException('Id not found');
+    }
+
+    return this.prisma.contact.delete({
+      where: { id },
     });
 
   }
