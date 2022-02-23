@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { TimeOptionService } from './time-option.service';
 
 @Controller('time-options')
@@ -10,6 +10,16 @@ export class TimeOptionController {
   async get() {
 
     return this.timeOptionService.listTimeOptions();
+
+  }
+
+  @Post()
+  async create(
+    @Body('day') day: number,
+    @Body('time') time: string,
+  ) {
+
+    return this.timeOptionService.createTimeOption({ day, time });
 
   }
 
