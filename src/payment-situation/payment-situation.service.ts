@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreatePaymentSituationDto } from './dto/create-payment-situation.dto';
+import { UpdatePaymentSituationDto } from './dto/update-payment-situation.dto';
 
 @Injectable()
 export class PaymentSituationService {
@@ -16,6 +18,10 @@ export class PaymentSituationService {
     return id;
   }
 
+  async findAll() {
+    return this.prisma.paymentSituation.findMany();
+  }
+
   async findById(id: number) {
     return this.prisma.paymentSituation.findUnique({
       where: {
@@ -24,21 +30,13 @@ export class PaymentSituationService {
     });
   }
   
-  async create({ name } : { name: string; }) {
-    if (!name) {
-      throw new BadRequestException('Name is required');
-    }
-
+  async create(data: CreatePaymentSituationDto) {
     return this.prisma.paymentSituation.create({
-      data: { name },
+      data,
     });
   }
 
-  async update(id: number, name: string) {
-    if (!name) {
-      throw new BadRequestException('Name is required');
-    }
-
+  async update(id: number, data: UpdatePaymentSituationDto) {
     if (!await this.findById(id)) {
       throw new BadRequestException('Id not found');
     }
@@ -47,7 +45,7 @@ export class PaymentSituationService {
       where: {
         id: this.isValidId(id),
       },
-      data: { name },
+      data,
     });
   }
 

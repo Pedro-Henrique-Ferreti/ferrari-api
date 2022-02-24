@@ -1,4 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { CreatePaymentSituationDto } from './dto/create-payment-situation.dto';
+import { UpdatePaymentSituationDto } from './dto/update-payment-situation.dto';
 import { PaymentSituationService } from './payment-situation.service';
 
 @Controller('payment-situations')
@@ -6,23 +8,28 @@ export class PaymentSituationController {
 
   constructor(private paymentSituationService: PaymentSituationService) {}
 
+  @Get()
+  async listAll () {
+    return this.paymentSituationService.findAll();
+  }
+
   @Get(':id')
-  async show (@Param('id') id) {
-    return this.paymentSituationService.findById(Number(id));
+  async show (@Param('id', ParseIntPipe) id) {
+    return this.paymentSituationService.findById(id);
   }
 
   @Post()
-  async create(@Body('name') name) {
-    return this.paymentSituationService.create({ name });
+  async create(@Body() data: CreatePaymentSituationDto) {
+    return this.paymentSituationService.create(data);
   }
 
   @Put(':id')
-  async update(@Param('id') id, @Body('name') name) {
-    return this.paymentSituationService.update(Number(id), name);
+  async update(@Param('id', ParseIntPipe) id, @Body() data: UpdatePaymentSituationDto) {
+    return this.paymentSituationService.update(id, data);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id) {
-    return this.paymentSituationService.delete(Number(id));
+  async delete(@Param('id', ParseIntPipe) id) {
+    return this.paymentSituationService.delete(id);
   }
 }
