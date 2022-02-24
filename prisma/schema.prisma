@@ -34,7 +34,7 @@ model Person {
   document  String?   @db.VarChar(14)
   createdAt DateTime  @default(now()) @db.DateTime(0)
   updatedAt DateTime  @default(now()) @db.DateTime(0)
-  address   Address[] @relation("addressesTopersons")
+  addresses Address[] @relation("addressesTopersons")
   Contact   Contact[] @relation("contactsTopersons")
   User      User[]
 
@@ -102,8 +102,8 @@ model PaymentSituation {
 model Address {
   id         Int      @id @default(autoincrement())
   street     String
-  number     String   @db.VarChar(16)
-  complement String
+  number     String?  @db.VarChar(16)
+  complement String?
   district   String
   city       String
   state      String

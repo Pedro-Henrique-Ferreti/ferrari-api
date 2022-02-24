@@ -12,52 +12,47 @@ export class Addresses1645656332737 implements MigrationInterface {
                     name: 'street',
                     type: 'varchar',
                     length: '191',
-                    isNullable: false,
                 },
                 {
                     name: 'number',
                     type: 'varchar',
                     length: '16',
+                    isNullable: true
                 },
                 {
                     name: 'complement',
                     type: 'varchar',
                     length: '191',
+                    isNullable: true
                 },
                 {
                     name: 'district',
                     type: 'varchar',
                     length: '191',
-                    isNullable: false,
                 },
                 {
                     name: 'city',
                     type: 'varchar',
                     length: '191',
-                    isNullable: false,
                 },
                 {
                     name: 'state',
                     type: 'varchar',
                     length: '191',
-                    isNullable: false,
                 },
                 {
                     name: 'country',
                     type: 'varchar',
                     length: '191',
-                    isNullable: false,
                 },
                 {
                     name: 'zipcode',
                     type: 'varchar',
                     length: '8',
-                    isNullable: false,
                 },
                 {
                     name: 'personId',
                     type: 'int',
-                    isNullable: false,
                 },
                 columnCreatedAt,
                 columnUpdatedAt,
