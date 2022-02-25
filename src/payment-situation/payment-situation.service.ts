@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { isValidNumber } from 'utils/validate-number';
 import { CreatePaymentSituationDto } from './dto/create-payment-situation.dto';
 import { UpdatePaymentSituationDto } from './dto/update-payment-situation.dto';
 
@@ -8,16 +9,6 @@ export class PaymentSituationService {
 
   constructor(private prisma: PrismaService) {}
 
-  isValidId(id) {
-    id = Number(id);
-
-    if (isNaN(id)) {
-      throw new BadRequestException('Id is invalid');
-    }
-
-    return id;
-  }
-
   async findAll() {
     return this.prisma.paymentSituation.findMany();
   }
@@ -25,7 +16,7 @@ export class PaymentSituationService {
   async findById(id: number) {
     return this.prisma.paymentSituation.findUnique({
       where: {
-        id: this.isValidId(id),
+        id: isValidNumber(id),
       },
     });
   }
@@ -43,7 +34,7 @@ export class PaymentSituationService {
 
     return this.prisma.paymentSituation.update({
       where: {
-        id: this.isValidId(id),
+        id: isValidNumber(id),
       },
       data,
     });
@@ -56,7 +47,7 @@ export class PaymentSituationService {
     
     return this.prisma.paymentSituation.delete({
       where: {
-        id: this.isValidId(id),
+        id: isValidNumber(id),
       },
     });
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { isValidId } from 'utils/validate-id';
+import { isValidNumber } from 'utils/validate-number';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ScheduleService {
   findOne(id: number) {
     return this.prisma.schedule.findUnique({
       where: {
-        id: isValidId(id),
+        id: isValidNumber(id),
       },
     });
   }
@@ -30,13 +30,13 @@ export class ScheduleService {
 
     const schedule = await this.prisma.schedule.create({
       data: {
-        timeOptionId: isValidId(timeOptionId),
-        paymentSituationId: isValidId(paymentSituationId),
-        billingAddressId: isValidId(billingAddressId),
+        timeOptionId: isValidNumber(timeOptionId),
+        paymentSituationId: isValidNumber(paymentSituationId),
+        billingAddressId: isValidNumber(billingAddressId),
         scheduleAt,
-        total: isValidId(total),
-        installments: isValidId(installments),
-        personId: isValidId(personId),
+        total: isValidNumber(total),
+        installments: isValidNumber(installments),
+        personId: isValidNumber(personId),
       },
     });
 

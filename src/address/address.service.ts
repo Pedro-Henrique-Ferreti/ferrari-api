@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { isValidId } from 'utils/validate-id';
+import { isValidNumber } from 'utils/validate-number';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 
@@ -15,7 +15,7 @@ export class AddressService {
   ) {}
 
   async isValidPerson(id: number, personId: number) {
-    personId = isValidId(personId);
+    personId = isValidNumber(personId);
 
     const address = await this.findOne(id);
 
@@ -33,7 +33,7 @@ export class AddressService {
   async findOne(id: number) {
     return this.prisma.address.findUnique({
       where: {
-        id: isValidId(id),
+        id: isValidNumber(id),
       },
     });
   }
@@ -41,13 +41,13 @@ export class AddressService {
   async findByPersonId(personId: number) {
     return this.prisma.address.findMany({
       where: {
-        personId: isValidId(personId),
+        personId: isValidNumber(personId),
       }
     });
   }
 
   async create(personId: number, data: CreateAddressDto) {
-    personId = isValidId(personId);
+    personId = isValidNumber(personId);
 
     return this.prisma.address.create({
       data: {
@@ -62,7 +62,7 @@ export class AddressService {
     
     return await this.prisma.address.update({
       where: {
-        id: isValidId(id),
+        id: isValidNumber(id),
       },
       data,
     });
@@ -73,7 +73,7 @@ export class AddressService {
     
     return await this.prisma.address.delete({
       where: {
-        id: isValidId(id),
+        id: isValidNumber(id),
       },
     });
   }
