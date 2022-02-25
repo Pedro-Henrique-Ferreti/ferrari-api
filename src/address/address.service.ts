@@ -1,4 +1,6 @@
+import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { lastValueFrom } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { isValidId } from 'utils/validate-id';
 import { CreateAddressDto } from './dto/create-address.dto';
@@ -7,7 +9,10 @@ import { UpdateAddressDto } from './dto/update-address.dto';
 @Injectable()
 export class AddressService {
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private httpService: HttpService,
+  ) {}
 
   async isValidPerson(id: number, personId: number) {
     personId = isValidId(personId);
@@ -71,5 +76,21 @@ export class AddressService {
         id: isValidId(id),
       },
     });
+  }
+
+  async searchCep(cep: string) {
+    cep = cep.replace(/[^\d]+g/, '');
+    
+    try {
+      const response = await lastValueFrom(this.httpService.request({
+        method: 'GET',
+        url: `https://viacep.com.br/ws/${cep}/json/`,
+      }));
+  
+      return response.data;
+    }
+    catch (error) {
+      throw new BadRequestException('Failed to search for the CEP')
+    }   
   }
 }

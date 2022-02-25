@@ -1,3 +1,4 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
@@ -8,6 +9,7 @@ import { AddressService } from './address.service';
 
 @Module({
   imports: [
+    HttpModule,
     PrismaModule,
     JwtModule.registerAsync({
       useFactory: () => ({
