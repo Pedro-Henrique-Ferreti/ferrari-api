@@ -10,9 +10,10 @@ import { ServiceModule } from './service/service.module';
 import { PaymentSituationService } from './payment-situation/payment-situation.service';
 import { PaymentSituationModule } from './payment-situation/payment-situation.module';
 import { AddressModule } from './address/address.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule, MailModule, ContactModule, TimeOptionModule, ServiceModule, PaymentSituationModule, AddressModule],
+  imports: [PrismaModule, UserModule, AuthModule, MailModule, ContactModule, TimeOptionModule, ServiceModule, PaymentSituationModule, AddressModule, ScheduleModule],
   controllers: [AppController],
   providers: [PaymentSituationService],
 })
